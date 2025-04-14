@@ -68,12 +68,6 @@ export default function RootLayout() {
             <Ionicons name="globe-outline" color={color} size={size} />
           ),
         }}
-        listeners={({ navigation }) => ({
-          tabPress: (e) => {
-            e.preventDefault();
-            navigation.navigate("planets");
-          }
-        })}
       />
       <Tabs.Screen
         name="index"

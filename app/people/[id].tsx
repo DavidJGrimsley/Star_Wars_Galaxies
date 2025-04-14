@@ -80,7 +80,7 @@ const Page = () => {
       <Text style={styles.detail}>Birth Year: {character.birth_year}</Text>
       <Text style={styles.detail}>Gender: {character.gender}</Text>
       <Text style={styles.detail}></Text>
-      <Link href={`../planets/${planetId}`} asChild> 
+      <Link href={`/planets/${planetId}`} asChild> 
         <TouchableOpacity>
           <Text style={styles.detail}>
             View Homeworld: {planet ? planet.name : 'Unknown'}
