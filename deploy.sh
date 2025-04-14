@@ -13,13 +13,14 @@ echo "Building the project"
 npm run build || exit 1
 
 echo "Deploying to server"
-scp -r * deployer@108.175.12.95:/home/deployer/starwarsGalaxies/ || exit 1
-
-echo "Deployment complete"
+rsync -av --exclude='.git' --exclude='node_modules' .next package.json package-lock.json public deployer@108.175.12.95:/home/deployer/starwarsGalaxies/ || exit 1
 
 echo "Restarting pm2"
 ssh deployer@108.175.12.95 "
-  pm2 describe starwarsGalaxies > /dev/null || pm2 start npm --name 'starwarsGalaxies' -- start
+  cd /home/deployer/starwarsGalaxies &&
+  git pull &&
+  npm install &&
+  npm run build &&
   pm2 restart starwarsGalaxies
 "
 echo "Server restarted"
