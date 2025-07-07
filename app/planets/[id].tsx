@@ -15,7 +15,7 @@ const Page = () => {
   useEffect(() => {
     const fetchPlanet = async () => {
       try {
-        const data = await fetchData<Planet>(`https://swapi.dev/api/planets/${id}/`); // Use helper
+        const data = await fetchData<Planet>(`https://swapi.py4e.com/api/planets/${id}/`); // Use helper
         console.log("🚀 ~ fetchPlanet ~ json:", data);
         setPlanet(data); // Directly set the planet object
       } catch (error) {

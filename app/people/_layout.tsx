@@ -1,6 +1,6 @@
 import { COLORS } from '@/constants/colors';
 import { Stack } from 'expo-router';
-import { PeopleProvider } from '../context/PeopleContext';
+import { PeopleProvider } from '../../helpers/PeopleContext';
 
 const Layout = () => {
   return (

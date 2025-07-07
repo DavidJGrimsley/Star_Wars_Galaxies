@@ -1,9 +1,11 @@
 import { COLORS } from "@/constants/colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 
+
 export default function RootLayout() {
+  const router = useRouter();
 
   return (
     <Tabs
@@ -35,6 +37,13 @@ export default function RootLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="film" color={color} size={size} />
           ),
+        }}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default behavior if needed
+            e.preventDefault();
+            router.replace("/films");
+          },
         }}
       />
       <Tabs.Screen

@@ -20,7 +20,7 @@ const Page = () => {
   useEffect(() => {
     const fetchFilm = async () => {
       try {
-        const response = await fetch(`https://swapi.dev/api/films/${id}/`);
+        const response = await fetch(`https://swapi.py4e.com/api/films/${id}/`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

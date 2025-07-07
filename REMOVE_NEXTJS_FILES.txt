@@ -1,0 +1,9 @@
+Delete these files to fully remove Next.js from your project:
+- next.config.js
+- next-env.d.ts
+
+You can also remove any .next directory if it appears after a build.
+
+No /pages directory was found, so no action needed there.
+
+Your project is now set up to use Express as a backend API proxy for SWAPI calls. No SSR is required for this pattern.

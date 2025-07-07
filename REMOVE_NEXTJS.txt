@@ -1,0 +1,36 @@
+Remove these leftover Next.js files:
+- next.config.js
+- next-env.d.ts
+
+You can safely delete them from your project root.
+
+No /pages directory or .next build output was found.
+
+---
+
+To use Express for API calls to swapi.dev (Star Wars API):
+
+1. In your Express server (server.js), add a route to proxy requests:
+
+app.get('/api/people', async (req, res) => {
+  try {
+    let allPeople = [];
+    let nextUrl = 'https://swapi.dev/api/people/';
+    while (nextUrl) {
+      const response = await fetch(nextUrl);
+      if (!response.ok) throw new Error('Failed to fetch people');
+      const data = await response.json();
+      allPeople = [...allPeople, ...data.results];
+      nextUrl = data.next;
+    }
+    res.json(allPeople);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+2. In your React app, change the fetch URL in PeopleContext.tsx from 'https://swapi.dev/api/people/' to '/api/people'.
+
+This way, your frontend calls your Express backend, which fetches from swapi.dev, avoiding CORS and hiding API details.
+
+You do NOT need SSR for this pattern—just a working Express backend.

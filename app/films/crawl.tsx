@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Animated, StyleSheet, Text, View, Dimensions, ImageBackground, Image } from 'react-native';
 import { COLORS } from '@/constants/colors';
 import { useLocalSearchParams } from 'expo-router';
+import { Audio } from 'expo-av';
 
 const Page = () => {
   const screenHeight = Dimensions.get('window').height;
@@ -12,6 +13,7 @@ const Page = () => {
   const crawlScale = useRef(new Animated.Value(1)).current; // Start at full size
   const { filmCrawl } = useLocalSearchParams();
   const filmCrawlString: string = filmCrawl as string;
+  const soundRef = useRef<Audio.Sound | null>(null);
 
   if (!filmCrawl) {
     return (
@@ -21,58 +23,87 @@ const Page = () => {
     );
   }
 
+  // Clean up sound on unmount
   useEffect(() => {
-    // Sequence of animations
-    Animated.sequence([
-      // Step 1: Fade in the View with texts
-      Animated.timing(viewOpacity, {
-        toValue: 1,
-        duration: 1000, // 1 second fade-in
-        useNativeDriver: true,
-      }),
-      Animated.timing(viewOpacity, {
-        toValue: 0,
-        duration: 1000, // 1 second fade-out after 5 seconds
-        delay: 4000, // Wait for 4 seconds before fading out
-        useNativeDriver: true,
-      }),
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unloadAsync();
+      }
+    };
+  }, []);
 
-      // Step 2: Scale and fade in the logo
-      Animated.parallel([
-        Animated.timing(logoOpacity, {
-          toValue: 1,
-          duration: 1000, // 1 second fade-in
-          useNativeDriver: true,
-        }),
-        Animated.timing(logoScale, {
-          toValue: 0.05, // Shrink to 1/20th of the size
-          duration: 12000, // 10 seconds
-          useNativeDriver: true,
-        }),
-      ]),
+  // Animation and sound logic
+  useEffect(() => {
+    // Step 1: Fade in the View with texts
+    const step1 = Animated.timing(viewOpacity, {
+      toValue: 1,
+      duration: 1000,
+      useNativeDriver: true,
+    });
+    const step1b = Animated.timing(viewOpacity, {
+      toValue: 0,
+      duration: 1000,
+      delay: 3000,
+      useNativeDriver: true,
+    });
 
-      // Step 3: Fade out the logo
+    // Step 2: Scale and fade in the logo
+    const step2 = Animated.parallel([
       Animated.timing(logoOpacity, {
-        toValue: 0,
-        duration: 1000, // 1 second fade-out
+        delay: 2000,
+        toValue: 1,
+        duration: 1000,
         useNativeDriver: true,
       }),
-    ]).start();
+      Animated.timing(logoScale, {
+        delay: 2000,
+        toValue: 0.05,
+        duration: 12000,
+        useNativeDriver: true,
+      })
+    ]);
+
+    // Step 3: Fade out the logo
+    const step3 = Animated.timing(logoOpacity, {
+      delay: -1000,
+      toValue: 0,
+      duration: 1000,
+      useNativeDriver: true,
+    });
+
+    // Sequence with callback for step 2
+    Animated.sequence([
+      step1,
+      step1b,
+    ]).start(() => {
+      // Play sound at step 2
+      (async () => {
+        try {
+          const { sound } = await Audio.Sound.createAsync(
+            require('@/assets/audio/starwars_theme.mp3')
+          );
+          soundRef.current = sound;
+          await sound.setVolumeAsync(0.05);
+          await sound.playAsync();
+        } catch (error) {
+          console.error('Error loading or playing sound:', error);
+        }
+      })();
+      // Start logo animation after sound starts
+      Animated.sequence([
+        step2,
+        step3,
+      ]).start();
+    });
 
     // Step 4: Animate the crawl text
     Animated.parallel([
       Animated.timing(translateY, {
-        toValue: -1000, // Move the text far up
-        duration: 70000, // Duration of the animation (70 seconds)
-        delay: 4000, // Delay before starting the crawl
+        toValue: -1000,
+        duration: 70000,
+        delay: 4000,
         useNativeDriver: true,
       }),
-      // Animated.timing(crawlScale, {
-      //   toValue: 0.5, // Shrink to 50% of the original size
-      //   duration: 70000, // Match the duration of the crawl
-      //   delay: 8000, // Delay before starting the crawl
-      //   useNativeDriver: true,
-      // }),
     ]).start();
   }, [viewOpacity, logoScale, logoOpacity, translateY, crawlScale]);
 

@@ -13,15 +13,12 @@ echo "Building the project"
 npm run build || exit 1
 
 echo "Deploying to server"
-rsync -av --exclude='.git' --exclude='node_modules' .next package.json package-lock.json public deployer@108.175.12.95:/home/deployer/starwarsGalaxies/ || exit 1
+scp -r public package.json package-lock.json server.js deployer@108.175.12.95:/var/www/vhosts/friendly-easley.108-175-12-95.plesk.page/httpdocs/ || exit 1
 
 echo "Restarting pm2"
 ssh deployer@108.175.12.95 "
-  cd /home/deployer/starwarsGalaxies &&
-  git pull &&
-  npm install &&
-  npm run build &&
-  pm2 restart starwarsGalaxies
+    cd /var/www/vhosts/friendly-easley.108-175-12-95.plesk.page/httpdocs &&
+    pm2 start server.js --name starwarsGalaxies
 "
 echo "Server restarted"
 echo "Deployment script finished"

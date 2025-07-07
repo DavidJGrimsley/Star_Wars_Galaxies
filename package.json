@@ -3,10 +3,10 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
-    "next-start": "next start",
-    "build": "next build",
-    "dev": "next dev",
+    "start": "node server.js",
+    "expo-start": "expo start",
+    "build": "echo 'No build step needed for Express'",
+    "dev": "node server.js",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -18,12 +18,13 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@expo/next-adapter": "^6.0.0",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "axios": "^1.8.4",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
     "expo": "~52.0.42",
     "expo-blur": "~14.0.3",
     "expo-constants": "~17.0.8",
@@ -36,7 +37,8 @@
     "expo-symbols": "~0.2.2",
     "expo-system-ui": "~4.0.9",
     "expo-web-browser": "~14.0.2",
-    "next": "^15.3.0",
+    "express": "^4.21.2",
+    "node-fetch": "^3.3.2",
     "react": "18.3.1",
     "react-dom": "^18.3.1",
     "react-native": "^0.76.9",
@@ -45,11 +47,13 @@
     "react-native-safe-area-context": "4.12.0",
     "react-native-screens": "~4.4.0",
     "react-native-web": "~0.19.13",
-    "react-native-webview": "13.12.5"
+    "react-native-webview": "13.12.5",
+    "expo-av": "~15.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@types/axios": "^0.9.36",
+    "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-test-renderer": "^18.3.0",
@@ -58,5 +62,6 @@
     "react-test-renderer": "18.3.1",
     "typescript": "^5.3.3"
   },
-  "private": true
+  "private": true,
+  "type": "module"
 }

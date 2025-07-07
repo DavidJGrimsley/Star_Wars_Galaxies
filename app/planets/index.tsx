@@ -12,9 +12,9 @@ const Page = () => {
     const [loading, setLoading] = useState(false)
     const [listLoading, setListLoading] = useState(false); // Adjusted initial state
     const [error, setError] = useState<string | null>(null)
-    const [nextPage, setNextPage] = useState<string | null>('https://swapi.dev/api/planets/?page=1')
+    const [nextPage, setNextPage] = useState<string | null>('https://swapi.py4e.com/api/planets/?page=1')
     const [refreshing, setRefreshing] = useState(false)
-    const firstPage = 'https://swapi.dev/api/planets/?page=1'
+    const firstPage = 'https://swapi.py4e.com/api/planets/?page=1'
     const [hasReachedEnd, setHasReachedEnd] = useState(false); // Track if we've reached the end
 
     const fetchPlanets = async (url: string) => {

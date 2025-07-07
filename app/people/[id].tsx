@@ -20,7 +20,7 @@ const Page = () => {
   useEffect(() => {
     const fetchCharacter = async () => {
       try {
-        const data = await fetchData<Character>(`https://swapi.dev/api/people/${id}/`); // Use helper
+        const data = await fetchData<Character>(`https://swapi.py4e.com/api/people/${id}/`); // Use helper
         setCharacter(data);
 
         // Fetch planet aka homeworld using the reusable function

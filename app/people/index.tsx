@@ -1,12 +1,14 @@
 import React from 'react';
-import { usePeople } from '../context/PeopleContext';
+import { usePeople } from '../../helpers/PeopleContext';
 import { FlatList, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import CharacterItem from '@/components/CharacterItem';
 import Loading from '@/components/Loading';
 import { useLocalSearchParams } from 'expo-router';
 
 const Page = () => {
+  console.log('Try to usepeople)')
   const { people, loading } = usePeople(); // Use the context to get the list of people and loading state
+  console.log('Usedpeople)')
   const params = useLocalSearchParams();
 
   const searchQuery = params.query ? (params.query as string) : '';
