@@ -12,22 +12,21 @@ const Page = () => {
     const [loading, setLoading] = useState(false)
     const [listLoading, setListLoading] = useState(false); // Adjusted initial state
     const [error, setError] = useState<string | null>(null)
-    const [nextPage, setNextPage] = useState<string | null>('https://swapi.py4e.com/api/planets/?page=1')
+    const [nextPage, setNextPage] = useState<string | null>('/api/planets?page=1')
+    const firstPage = '/api/planets?page=1'
     const [refreshing, setRefreshing] = useState(false)
-    const firstPage = 'https://swapi.py4e.com/api/planets/?page=1'
     const [hasReachedEnd, setHasReachedEnd] = useState(false); // Track if we've reached the end
 
     const fetchPlanets = async (url: string) => {
-        if (hasReachedEnd) return; // Stop fetching if we've reached the end
+        if (hasReachedEnd) return;
         if (url === firstPage && planets.length > 0) {
-            setHasReachedEnd(true); // Mark as end if we're back to the first page
+            setHasReachedEnd(true);
             return;
         }
-
         if (url === firstPage) {
             setLoading(true);
         } else {
-            setListLoading(true); // Start list loading for subsequent pages
+            setListLoading(true);
         }
         try {
             const response = await fetch(url)
@@ -36,12 +35,22 @@ const Page = () => {
             }
             const data = await response.json()
             setPlanets((prevPlanets) => [...prevPlanets, ...data.results])
-            setNextPage(data.next)
+            // If there's a next page, update nextPage, else set to null
+            if (data.next) {
+                // Extract the page number from SWAPI's next URL and build the proxy URL
+                const match = data.next.match(/page=(\d+)/)
+                const nextPageNum = match ? match[1] : null
+                setNextPage(nextPageNum ? `/api/planets?page=${nextPageNum}` : null)
+            } else {
+                setNextPage(null)
+                setHasReachedEnd(true)
+            }
         } catch (error) {
             setError('Failed to load planets')
+            setLoading(false);
         } finally {
             setLoading(false);
-            setListLoading(false); // Stop list loading
+            setListLoading(false);
             setRefreshing(false);
         }
     }

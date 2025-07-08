@@ -44,7 +44,20 @@ app.get('/api/people', async (req, res) => {
   }
 });
 
-
+// Proxy SWAPI planets endpoint with pagination
+app.get('/api/planets', async (req, res) => {
+  const page = req.query.page || 1;
+  const swapiUrl = `https://swapi.py4e.com/api/planets/?page=${page}`;
+  try {
+    const response = await fetch(swapiUrl);
+    if (!response.ok) throw new Error('Failed to fetch planets');
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error('Error fetching planets from SWAPI:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // Catch-all route to serve the main HTML file
 app.get('*', (req, res) => {

@@ -56,6 +56,13 @@ export default function RootLayout() {
             <Ionicons name="people" color={color} size={size} />
           ),
         }}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default behavior if needed
+            e.preventDefault();
+            router.replace("/people");
+          },
+        }}
       />
       <Tabs.Screen
         name="favorites"
@@ -76,6 +83,13 @@ export default function RootLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="globe-outline" color={color} size={size} />
           ),
+        }}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default behavior if needed
+            e.preventDefault();
+            router.replace("/planets");
+          },
         }}
       />
       <Tabs.Screen
